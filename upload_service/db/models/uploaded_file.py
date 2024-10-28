@@ -4,6 +4,7 @@ from sqlalchemy.sql.sqltypes import String, Float
 from datetime import datetime
 from upload_service.db.base import Base
 
+
 class UploadedFile(Base):
     """Model to store metadata and manage uploaded files."""
 

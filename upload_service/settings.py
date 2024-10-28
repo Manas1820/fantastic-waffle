@@ -40,7 +40,6 @@ class Settings(BaseSettings):
 
     log_level: LogLevel = LogLevel.INFO
 
-
     # Variables for the database
     db_host: str = "localhost"
     db_port: int = 5432
@@ -48,6 +47,10 @@ class Settings(BaseSettings):
     db_pass: str = "postgres"
     db_base: str = "postgres"
     db_echo: bool = False
+
+    # AWS S3 settings
+    aws_access_key_id: Optional[str] = None
+    aws_secret_access_key: Optional[str] = None
 
     @property
     def db_url(self) -> URL:
@@ -67,7 +70,7 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(
         env_file=".env",
-        env_prefix="UPLOAD_SERVICE_",
+        env_prefix="",
         env_file_encoding="utf-8",
     )
 

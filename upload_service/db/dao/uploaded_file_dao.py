@@ -37,7 +37,7 @@ class UploadedFileDAO:
             file_path=file_path,
             file_size=file_size,
             file_type=file_type,
-            created_at=datetime.utcnow()
+            created_at=datetime.utcnow(),
         )
         self.session.add(uploaded_file)
 

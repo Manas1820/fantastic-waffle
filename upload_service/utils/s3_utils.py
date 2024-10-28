@@ -1,8 +1,18 @@
 import boto3
 from botocore.exceptions import NoCredentialsError, ClientError
+from upload_service.settings import settings
 
 
-s3_client = boto3.client('s3')
+def get_s3_client():
+    """
+    Lazily initialize and return the S3 client.
+    """
+    return boto3.client(
+        "s3",
+        aws_access_key_id=settings.aws_access_key_id,
+        aws_secret_access_key=settings.aws_secret_access_key,
+    )
+
 
 def save_file_to_s3(bucket_name: str, file_path: str, file_content: bytes) -> str:
     """
@@ -15,11 +25,12 @@ def save_file_to_s3(bucket_name: str, file_path: str, file_content: bytes) -> st
     """
 
     try:
+        s3_client = get_s3_client()
         s3_client.put_object(
             Bucket=bucket_name,
             Key=file_path,
             Body=file_content,
-            ContentType='application/octet-stream'
+            ContentType="application/octet-stream",
         )
 
         # Generate the URL to the file
