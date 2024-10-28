@@ -1,0 +1,56 @@
+services:
+  api: &main_app
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: upload_service:${UPLOAD_SERVICE_VERSION:-latest}
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      UPLOAD_SERVICE_HOST: 0.0.0.0
+      UPLOAD_SERVICE_DB_HOST: upload_service-db
+      UPLOAD_SERVICE_DB_PORT: 5432
+      UPLOAD_SERVICE_DB_USER: upload_service
+      UPLOAD_SERVICE_DB_PASS: upload_service
+      UPLOAD_SERVICE_DB_BASE: upload_service
+      UPLOAD_SERVICE_REDIS_HOST: upload_service-redis
+
+  db:
+    image: postgres:16.3-bullseye
+    hostname: upload_service-db
+    environment:
+      POSTGRES_PASSWORD: "upload_service"
+      POSTGRES_USER: "upload_service"
+      POSTGRES_DB: "upload_service"
+    volumes:
+      - upload_service-db-data:/var/lib/postgresql/data
+    restart: always
+    healthcheck:
+      test: pg_isready -U upload_service
+      interval: 2s
+      timeout: 3s
+      retries: 40
+
+  redis:
+    image: bitnami/redis:6.2.5
+    hostname: "upload_service-redis"
+    restart: always
+    environment:
+      ALLOW_EMPTY_PASSWORD: "yes"
+    healthcheck:
+      test: redis-cli ping
+      interval: 1s
+      timeout: 3s
+      retries: 50
+
+
+
+volumes:
+  upload_service-db-data:
+    name: upload_service-db-data
