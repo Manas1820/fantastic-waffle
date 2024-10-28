@@ -1,6 +1,6 @@
 # upload_service
 
-To test the route you can use 
+#### Sample Curl Request
 
 ```
 curl -X POST "http://localhost:8000/api/upload-file" -F "file=@README.md"
