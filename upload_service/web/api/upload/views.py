@@ -33,7 +33,7 @@ async def upload_file(
         file_path = f"uploads/{file.filename}"
         content = await file.read()
 
-        # file_url = save_file_to_s3(s3_bucket, file_path, content)
+        file_url = save_file_to_s3(s3_bucket, file_path, content)
         uploaded_file_dao = UploadedFileDAO(session)
         await uploaded_file_dao.create_uploaded_file(
             name=file.filename,
