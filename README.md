@@ -1,6 +1,10 @@
 # upload_service
 
-This project was generated using fastapi_template.
+To test the route you can use 
+
+```
+curl -X POST "http://localhost:8000/api/upload-file" -F "file=@README.md"
+```
 
 ## Poetry
 
